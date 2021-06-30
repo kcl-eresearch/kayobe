@@ -307,6 +307,9 @@ Apt cache
 The Apt cache timeout may be configured via ``apt_cache_valid_time`` (in
 seconds) in ``etc/kayobe/apt.yml``, and defaults to 3600.
 
+Apt can be configured to use a proxy via ``apt_proxy_host`` and
+``apt_proxy_port`` in ``etc/kayobe/apt.yml``.
+
 SELinux
 =======
 *tags:*
