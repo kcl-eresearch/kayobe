@@ -9,4 +9,4 @@
     - name: include apt role
       include_role:
         name: apt
-      when: ansible_os_family == 'Debian'
+      when: ansible_facts.os_family == 'Debian'

@@ -5,8 +5,9 @@
 # Apt cache TTL in seconds. Default is 3600.
 apt_cache_valid_time: 3600
 
-# Apt proxy host. Default is empty (no proxy).
-apt_proxy_host: ''
+# Apt proxy URL for HTTP. Default is empty (no proxy).
+apt_proxy_http:
 
-# Apt proxy port. Default is 3128.
-apt_proxy_port: 3128
+# Apt proxy URL for HTTPS. Default is
+# {{ apt_proxy_http }}.
+apt_proxy_https: "{{ apt_proxy_http }}"

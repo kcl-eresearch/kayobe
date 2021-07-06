@@ -1,4 +1,8 @@
 Acquire {
- HTTP::proxy "http://{{ apt_proxy_host }}:{{ apt_proxy_port }}";
- HTTPS::proxy "http://{{ apt_proxy_host }}:{{ apt_proxy_port }}";
+{% if apt_proxy_http | length > 0 -%}
+  HTTP::proxy "{{ apt_proxy_http }}";
+{% endif -%}
+{% if apt_proxy_https | length > 0 -%}
+  HTTPS::proxy "{{ apt_proxy_https }}";
+{% endif -%}
 }
