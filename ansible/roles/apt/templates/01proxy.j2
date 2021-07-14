@@ -1,0 +1,4 @@
+Acquire {
+ HTTP::proxy "http://{{ apt_proxy_host }}:{{ apt_proxy_port }}";
+ HTTPS::proxy "http://{{ apt_proxy_host }}:{{ apt_proxy_port }}";
+}
