@@ -5,6 +5,12 @@
 # Apt cache TTL in seconds. Default is 3600.
 #apt_cache_valid_time:
 
+# Apt proxy host. Default is empty (no proxy).
+#apt_proxy_host:
+
+# Apt proxy port. Default is 3128.
+#apt_proxy_port:
+
 ###############################################################################
 # Dummy variable to allow Ansible to accept this file.
 workaround_ansible_issue_8743: yes
