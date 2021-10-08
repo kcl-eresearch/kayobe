@@ -7,11 +7,11 @@
     group: root
     mode: 0664
   become: true
-  when: apt_proxy_http is not none or apt_proxy_https is not none
+  when: apt_proxy_http | default('', true) | length > 0 or apt_proxy_https | default('', true) | length > 0
 
 - name: Remove old apt proxy config
   file:
     path: /etc/apt/apt.conf.d/01proxy
     state: absent
   become: true
-  when: apt_proxy_http is none and apt_proxy_https is none
+  when: apt_proxy_http | default('', true) | length == 0 and apt_proxy_https | default('', true) | length == 0

@@ -233,7 +233,7 @@ API Addresses
 .. note::
 
    These variables should be used over the deprecated ``vip_address`` and
-   ``fqdn`` `network attributes <configuration-network-global>`
+   ``fqdn`` :ref:`network attributes <configuration-network-global>`.
 
 The following variables affect the addresses used for the external and internal
 API.
@@ -673,6 +673,7 @@ which files are supported.
    ``cloudkitty/*``                Extended CloudKitty configuration.
    ``designate.conf``              Designate configuration.
    ``designate/*``                 Extended Designate configuration.
+   ``elasticsearch/*``             Elasticsearch configuration.
    ``fluentd/filter``              Fluentd filter configuration.
    ``fluentd/input``               Fluentd input configuration.
    ``fluentd/output``              Fluentd output configuration.
@@ -715,6 +716,7 @@ which files are supported.
    ``nova/*``                      Extended nova configuration.
    ``octavia.conf``                Octavia configuration.
    ``octavia/*``                   Extended Octavia configuration.
+   ``prometheus/*``                Prometheus configuration.
    ``sahara.conf``                 Sahara configuration.
    ``sahara/*``                    Extended sahara configuration.
    ``storm/*``                     Extended Storm configuration.
