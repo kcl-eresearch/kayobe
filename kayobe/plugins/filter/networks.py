@@ -175,6 +175,11 @@ def net_interface(context, name, inventory_hostname=None):
 
 
 @jinja2.contextfilter
+def net_no_ip(context, name, inventory_hostname=None):
+    return net_attr(context, name, 'no_ip', inventory_hostname)
+
+
+@jinja2.contextfilter
 def net_cidr(context, name, inventory_hostname=None):
     return net_attr(context, name, 'cidr', inventory_hostname)
 
@@ -536,6 +541,14 @@ def net_is_vlan(context, name, inventory_hostname=None):
 
 
 @jinja2.contextfilter
+def net_is_vlan_interface(context, name, inventory_hostname=None):
+    device = get_and_validate_interface(context, name, inventory_hostname)
+    # Use a heuristic to match conventional VLAN names, ending with a
+    # period and a numerical extension to an interface name
+    return re.match(r"^[a-zA-Z0-9_\-]+\.[1-9][\d]{0,3}$", device)
+
+
+@jinja2.contextfilter
 def net_select_ethers(context, names, inventory_hostname=None):
     return [name for name in names
             if net_is_ether(context, name, inventory_hostname)]
@@ -557,6 +570,12 @@ def net_select_bonds(context, names, inventory_hostname=None):
 def net_select_vlans(context, names, inventory_hostname=None):
     return [name for name in names
             if net_is_vlan(context, name, inventory_hostname)]
+
+
+@jinja2.contextfilter
+def net_select_vlan_interfaces(context, names, inventory_hostname=None):
+    return [name for name in names
+            if net_is_vlan_interface(context, name, inventory_hostname)]
 
 
 @jinja2.contextfilter
@@ -656,6 +675,7 @@ def get_filters():
         'net_fqdn': _make_attr_filter('fqdn'),
         'net_ip': net_ip,
         'net_interface': net_interface,
+        'net_no_ip': net_no_ip,
         'net_cidr': net_cidr,
         'net_mask': net_mask,
         'net_prefix': net_prefix,
