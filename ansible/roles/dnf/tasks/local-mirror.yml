@@ -13,6 +13,7 @@
     - "{{ repo_file_prefix }}-AppStream.repo"
     - "{{ repo_file_prefix }}-BaseOS.repo"
     - "{{ repo_file_prefix }}-Extras.repo"
+  when: ansible_facts.distribution_major_version == '8'
 
 - name: Remove old (pre CentOS 8.3) repo files
   file:
@@ -23,7 +24,36 @@
     - CentOS-AppStream.repo
     - CentOS-Base.repo
     - CentOS-Extras.repo
-  when: ansible_facts.distribution == 'CentOS'
+  when: ansible_facts.distribution == 'CentOS' and ansible_facts.distribution_major_version == '8'
+
+- name: Copy Rocky 9/CentOS Stream 9 repo templates
+  vars:
+    repo_file_prefix: "{{ ansible_facts.distribution | lower }}"
+  template:
+    src: "{{ item }}.j2"
+    dest: /etc/yum.repos.d/{{ item }}
+    owner: root
+    group: root
+    mode: 0664
+  become: True
+  loop:
+    - "{{ repo_file_prefix }}.repo"
+    - "{{ repo_file_prefix }}-extras.repo"
+  when: ansible_facts.distribution_major_version == '9'
+
+# TODO(bbezak): remove following task in B release
+- name: Remove incorrect uppercase repo files for Rocky 9/CentOS Stream
+  vars:
+    repo_file_prefix: "{{ ansible_facts.distribution }}{% if ansible_facts.distribution == 'CentOS'%}-Stream{% endif %}"
+  file:
+    path: /etc/yum.repos.d/{{ item }}
+    state: absent
+  become: True
+  loop:
+    - "{{ repo_file_prefix }}-AppStream.repo"
+    - "{{ repo_file_prefix }}-BaseOS.repo"
+    - "{{ repo_file_prefix }}-Extras.repo"
+  when: ansible_facts.distribution_major_version == '9'
 
 - name: Update cache
   dnf:
@@ -42,16 +72,16 @@
 
 - name: Copy EPEL repo templates
   template:
-    src: "{{ item }}.j2"
-    dest: /etc/yum.repos.d/{{ item }}
+    src: "{{ item.file }}.j2"
+    dest: /etc/yum.repos.d/{{ item.file }}
     owner: root
     group: root
     mode: 0664
   become: True
   loop:
-    - epel.repo
-    - epel-modular.repo
-  when: dnf_install_epel | bool
+    - { file: 'epel.repo', enabled: true }
+    - { file: 'epel-modular.repo', enabled: "{{ ansible_facts.distribution_major_version == '8' }}" }
+  when: dnf_install_epel | bool and item.enabled | bool
 
 - name: Update cache
   dnf:

@@ -10,6 +10,7 @@
     - nm_result is failed
     # Ugh, Ansible's service module doesn't handle uninstalled services.
     - "'Could not find the requested service' not in nm_result.msg"
+  when: ansible_facts.os_family == "RedHat" and ansible_facts.distribution_major_version == "8"
 
 - import_role:
     name: ahuffman.resolv
@@ -38,6 +39,10 @@
          list }}
     interfaces_setup_filter: "{{ kayobe_ansible_setup_filter }}"
     interfaces_setup_gather_subset: "{{ kayobe_ansible_setup_gather_subset }}"
+
+# NOTE(priteau): We need to run handlers from MichaelRigart.interfaces before
+# we start configuring any veth interfaces.
+- meta: flush_handlers
 
 # Configure virtual ethernet patch links to connect the workload provision
 # and external network bridges to the Neutron OVS bridge.
